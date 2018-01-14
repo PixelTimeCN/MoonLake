@@ -680,17 +680,21 @@ fun Plugin.newAnvilWindow(): AnvilWindow
 fun ItemStack.newItemBuilder(): ItemBuilder
         = ItemBuilder.of(this)
 
-fun Material.newItemBuilder(amount: Int = 1, durability: Int = 0): ItemBuilder
+fun org.bukkit.Material.newItemBuilder(amount: Int = 1, durability: Int = 0): ItemBuilder
         = ItemBuilder.of(this, amount, durability)
 
-fun Material.newItemStack(amount: Int = 1, durability: Int = 0): ItemStack
+@Deprecated("Not completed", level = DeprecationLevel.ERROR) // TODO api.Material
+fun com.mcmoonlake.api.Material.newItemBuilder(amount: Int, durability: Int = 0): ItemBuilder
+        { throw UnsupportedOperationException() }
+
+fun org.bukkit.Material.newItemStack(amount: Int = 1, durability: Int = 0): ItemStack
         = ItemStack(this, amount, durability.toShort())
 
 fun ItemStack?.isAir(): Boolean
-        = this == null || this.type == Material.AIR
+        = this == null || this.type == org.bukkit.Material.AIR
 
 fun ItemStack?.isEmpty(): Boolean
-        = this == null || this.type == Material.AIR || !hasItemMeta()
+        = this == null || this.type == org.bukkit.Material.AIR || !hasItemMeta()
 
 fun ItemStack.givePlayer(player: Player): Boolean
         = player.inventory.addItem(this).isEmpty() // the result is empty, indicating the success
@@ -709,7 +713,7 @@ fun newNBTCompound(name: String = ""): NBTCompound
 fun <T> newNBTList(name: String = ""): NBTList<T>
         = NBTFactory.ofList(name)
 
-fun Material.newItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack
+fun org.bukkit.Material.newItemStack(amount: Int = 1, durability: Int = 0, tag: NBTCompound? = null): ItemStack
         = NBTFactory.createStack(this, amount, durability, tag)
 
 inline fun ItemStack.readTag(consumer: (tag: NBTCompound?) -> Unit): ItemStack

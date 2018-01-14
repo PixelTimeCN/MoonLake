@@ -40,19 +40,19 @@ object Items {
     @JvmField
     val AIR = ItemStack(Material.AIR)
 
-    @JvmStatic
+    @JvmStatic // TODO delete
     private val itemGetById: AccessorMethod by lazy {
         Accessors.getAccessorMethod(MinecraftReflection.itemClass, "getById", true, Int::class.java) }
 
     @JvmStatic
     @JvmName("getItemById")
-    @Deprecated("Material Id")
+    @Deprecated("Material Id") // TODO delete
     fun getItemById(id: Int): Any?
             = itemGetById.invoke(null, id) // TODO v1.13
 
     @JvmStatic
     @JvmName("getItemByType")
-    @Deprecated("Material Id")
+    @Deprecated("Material Id") // TODO delete
     fun getItemByType(type: Material): Any?
             = itemGetById.invoke(null, type.id) // TODO v1.13
 

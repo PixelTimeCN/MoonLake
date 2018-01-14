@@ -360,6 +360,14 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setCanPlaceOn(vararg type: Material): ItemBuilder
             = setMaterialFromArray(TAG_CAN_PLACE_ON, *type)
 
+    override fun setCanDestroy(vararg type: com.mcmoonlake.api.Material): ItemBuilder {
+        throw UnsupportedOperationException()
+    }
+
+    override fun setCanPlaceOn(vararg type: com.mcmoonlake.api.Material): ItemBuilder {
+        throw UnsupportedOperationException()
+    }
+
     override fun getRepairCost(block: (self: ItemBuilder, repairCost: Int?) -> Unit): ItemBuilder
             { block(this, tag.getIntOrNull(TAG_REPAIR_COST)); return this; }
 
