@@ -41,10 +41,13 @@ import com.mcmoonlake.api.particle.Particle
 import com.mcmoonlake.api.player.PlayerInfo
 import com.mcmoonlake.api.task.MoonLakeRunnable
 import org.bukkit.*
+import org.bukkit.Material
 import org.bukkit.entity.Pig
 import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
+import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
@@ -516,6 +519,34 @@ class MoonLakePluginTest : JavaPlugin() {
                         else
                             event.player.sendMessage("Sync later future value size: ${value}")
                     }
+                }
+            }
+            @EventHandler
+            fun onChat(event: AsyncPlayerChatEvent) {
+                if(event.message == "DEBUG" && !event.player.itemInHand.isAir()) {
+                    val itemStack = event.player.itemInHand
+                    event.isCancelled = true
+                    event.player.sendMessage(arrayOf(
+                            "&b&m                    ",
+                            "&7Type: &a${itemStack.type}",
+                            "&7TypeId: &a${itemStack.type.id}",
+                            "&7Durability: &a${itemStack.durability}",
+                            "&b&m                    "
+                    ).toColor())
+                }
+            }
+            @EventHandler
+            fun onAction(event: PlayerInteractEvent) {
+                if(event.clickedBlock != null && event.hasItem() && "DEBUG" == event.item.itemMeta.displayName) {
+                    val block = event.clickedBlock
+                    event.isCancelled = true
+                    event.player.sendMessage(arrayOf(
+                            "&b&m                    ",
+                            "&7Type: &a${block.type}",
+                            "&7TypeId: &a${block.type.id}",
+                            "&7Location: &a${block.x},${block.y},${block.z}",
+                            "&b&m                    "
+                    ).toColor())
                 }
             }
         }.registerEvent(this)

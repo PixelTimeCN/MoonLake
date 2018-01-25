@@ -106,10 +106,10 @@ interface ItemBuilder : Builder<ItemStack> {
     fun setCanPlaceOn(vararg type: Material): ItemBuilder
 
     @Deprecated("Not completed", level = DeprecationLevel.ERROR) // TODO api.Material
-    fun setCanDestroy(vararg type: com.mcmoonlake.api.Material): ItemBuilder
+    fun setCanDestroy(vararg type: com.mcmoonlake.api.item.Material): ItemBuilder
 
     @Deprecated("Not completed", level = DeprecationLevel.ERROR) // TODO api.Material
-    fun setCanPlaceOn(vararg type: com.mcmoonlake.api.Material): ItemBuilder
+    fun setCanPlaceOn(vararg type: com.mcmoonlake.api.item.Material): ItemBuilder
 
     fun getRepairCost(block: (self: ItemBuilder, repairCost: Int?) -> Unit): ItemBuilder
 
@@ -272,7 +272,7 @@ interface ItemBuilder : Builder<ItemStack> {
          * @see [com.mcmoonlake.api.Material]
          */
         @Deprecated("Not completed", level = DeprecationLevel.ERROR) // TODO api.Material
-        fun of(material: com.mcmoonlake.api.Material, amount: Int, duration: Int): ItemBuilder
-                = object: ItemBuilderAbstract(material.cast(), amount, duration) {}
+        fun of(material: com.mcmoonlake.api.item.Material, amount: Int, duration: Int): ItemBuilder
+                = object: ItemBuilderAbstract(material.toBukkit(), amount, duration) {}
     }
 }

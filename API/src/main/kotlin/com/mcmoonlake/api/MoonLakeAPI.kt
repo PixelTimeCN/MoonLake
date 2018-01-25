@@ -32,6 +32,7 @@ import com.mcmoonlake.api.event.MoonLakeListener
 import com.mcmoonlake.api.exception.MoonLakeException
 import com.mcmoonlake.api.funs.Function
 import com.mcmoonlake.api.item.ItemBuilder
+import com.mcmoonlake.api.item.Material
 import com.mcmoonlake.api.nbt.NBTCompound
 import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.nbt.NBTList
@@ -686,7 +687,7 @@ fun org.bukkit.Material.newItemBuilder(amount: Int = 1, durability: Int = 0): It
         = ItemBuilder.of(this, amount, durability)
 
 @Deprecated("Not completed", level = DeprecationLevel.ERROR) // TODO api.Material
-fun com.mcmoonlake.api.Material.newItemBuilder(amount: Int, durability: Int = 0): ItemBuilder
+fun com.mcmoonlake.api.item.Material.newItemBuilder(amount: Int, durability: Int = 0): ItemBuilder
         { throw UnsupportedOperationException() }
 
 fun org.bukkit.Material.newItemStack(amount: Int = 1, durability: Int = 0): ItemStack

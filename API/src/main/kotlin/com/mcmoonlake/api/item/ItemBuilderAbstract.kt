@@ -359,11 +359,11 @@ abstract class ItemBuilderAbstract : ItemBuilder {
     override fun setCanPlaceOn(vararg type: Material): ItemBuilder
             = setMaterialFromArray(TAG_CAN_PLACE_ON, *type)
 
-    override fun setCanDestroy(vararg type: com.mcmoonlake.api.Material): ItemBuilder {
+    override fun setCanDestroy(vararg type: com.mcmoonlake.api.item.Material): ItemBuilder {
         throw UnsupportedOperationException()
     }
 
-    override fun setCanPlaceOn(vararg type: com.mcmoonlake.api.Material): ItemBuilder {
+    override fun setCanPlaceOn(vararg type: com.mcmoonlake.api.item.Material): ItemBuilder {
         throw UnsupportedOperationException()
     }
 
