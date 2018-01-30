@@ -69,6 +69,7 @@ import org.bukkit.plugin.messaging.Messenger
 import org.bukkit.scheduler.BukkitScheduler
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.scoreboard.Scoreboard
+import org.bukkit.scoreboard.ScoreboardManager
 import java.io.Closeable
 import java.io.IOException
 import java.lang.reflect.Method
@@ -352,6 +353,9 @@ fun createInventory(holder: InventoryHolder?, size: Int): Inventory
 
 fun createInventory(holder: InventoryHolder?, size: Int, title: String): Inventory
         = Bukkit.createInventory(holder, size, title)
+
+fun getScoreboardManager(): ScoreboardManager
+        = Bukkit.getScoreboardManager()
 
 fun getScoreboardMain(): Scoreboard
         = Bukkit.getScoreboardManager().mainScoreboard

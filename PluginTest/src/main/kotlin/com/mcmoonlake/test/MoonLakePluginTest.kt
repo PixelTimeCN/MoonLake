@@ -39,6 +39,8 @@ import com.mcmoonlake.api.nbt.NBTFactory
 import com.mcmoonlake.api.packet.*
 import com.mcmoonlake.api.particle.Particle
 import com.mcmoonlake.api.player.PlayerInfo
+import com.mcmoonlake.api.scoreboard.ScoreboardSide
+import com.mcmoonlake.api.scoreboard.Scoreboards
 import com.mcmoonlake.api.task.MoonLakeRunnable
 import org.bukkit.*
 import org.bukkit.entity.Pig
@@ -549,9 +551,24 @@ class MoonLakePluginTest : JavaPlugin() {
                             .build()
                             .also { event.player.itemInHand = it }
                 }
+                if(event.message == "/sb test") {
+                    side.displayName = "&6Scoreboard Side".toColor()
+                    side.registerNewEntry("&7Health: &a&l".toColor()).score = 1
+                    side.registerNewEntry("&7Food: &a&l".toColor()).score = 0
+                    side.apply(event.player)
+
+                    runTaskTimerAsync({
+                        getOnlinePlayers().forEach {
+                            side.getEntry("&7Health: &a&l".toColor())?.suffix = it.health.toInt().toString()
+                            side.getEntry("&7Food: &a&l".toColor())?.suffix = it.foodLevel.toString()
+                        }
+                    }, 0L, 20L)
+                }
             }
         }.registerEvent(this)
     }
+
+    val side: ScoreboardSide by lazy { Scoreboards.registerNewScoreboardSide() }
 
     class ItemShow(itemStack: ItemStack) : ChatComponentFancy("[") {
         init {
