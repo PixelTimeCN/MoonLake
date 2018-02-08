@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mcmoonlake.api.scoreboard.internal
+package com.mcmoonlake.impl.scoreboard
 
 import com.mcmoonlake.api.scoreboard.EntrySide
 import org.bukkit.scoreboard.Score

@@ -17,12 +17,18 @@
 
 package com.mcmoonlake.api.scoreboard
 
-import com.mcmoonlake.api.scoreboard.internal.ScoreboardSideImpl
+import com.mcmoonlake.api.getScoreboardManager
+import org.bukkit.scoreboard.Scoreboard
 
 object Scoreboards {
 
+    private val impl: Class<ScoreboardSide> by lazy {
+        @Suppress("UNCHECKED_CAST")
+        Class.forName("com.mcmoonlake.impl.scoreboard.ScoreboardSideImpl") as Class<ScoreboardSide> }
+
     @JvmStatic
     @JvmName("registerNewScoreboardSide")
-    fun registerNewScoreboardSide(): ScoreboardSide
-            = ScoreboardSideImpl()
+    fun registerNewScoreboardSide(name: String, fromMain: Boolean = false): ScoreboardSide
+            = impl.getConstructor(String::class.java, Scoreboard::class.java)
+            .newInstance(name, if(fromMain) getScoreboardManager().mainScoreboard else null)
 }

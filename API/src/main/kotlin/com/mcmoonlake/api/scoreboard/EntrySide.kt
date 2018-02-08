@@ -17,9 +17,7 @@
 
 package com.mcmoonlake.api.scoreboard
 
-interface EntrySide {
-
-    val name: String
+interface EntrySide : Entry {
 
     var score: Int
 

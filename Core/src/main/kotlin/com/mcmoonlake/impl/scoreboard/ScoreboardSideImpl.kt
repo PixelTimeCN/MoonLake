@@ -15,9 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mcmoonlake.api.scoreboard.internal
+package com.mcmoonlake.impl.scoreboard
 
 import com.mcmoonlake.api.getScoreboardManager
+import com.mcmoonlake.api.player.MoonLakePlayer
 import com.mcmoonlake.api.scoreboard.EntrySide
 import com.mcmoonlake.api.scoreboard.ScoreboardSide
 import org.bukkit.entity.Player
@@ -26,11 +27,12 @@ import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
 
 class ScoreboardSideImpl(
+        name: String,
         scoreboard: Scoreboard? = null
 ) : ScoreboardSide {
 
     private val handle: Scoreboard = scoreboard ?: getScoreboardManager().newScoreboard
-    private val objective = handle.registerNewObjective("handle", "dummy")
+    private val objective = handle.registerNewObjective(name, "dummy")
 
     init {
         objective.displaySlot = DisplaySlot.SIDEBAR
@@ -43,10 +45,19 @@ class ScoreboardSideImpl(
     override fun registerNewEntry(name: String): EntrySide {
         var team: Team? = handle.getTeam(name)
         if(team != null)
-            throw IllegalStateException("Entry name '$name' is already in use")
+            throw IllegalStateException("Entry name '$name' is already in use.")
         team = handle.registerNewTeam(name)
         team.addEntry(name)
         return EntrySideImpl(name, team, objective.getScore(name))
+    }
+
+    override fun getEntryOrRegisterNew(name: String): EntrySide {
+        var team: Team? = handle.getTeam(name)
+        if(team == null) {
+            team = handle.registerNewTeam(name)
+            team.addEntry(name)
+        }
+        return EntrySideImpl(name, team!!, objective.getScore(name))
     }
 
     override fun getEntry(name: String): EntrySide? {
@@ -57,4 +68,7 @@ class ScoreboardSideImpl(
     override fun apply(player: Player) {
         player.scoreboard = handle
     }
+
+    override fun apply(player: MoonLakePlayer)
+            = apply(player.bukkitPlayer)
 }

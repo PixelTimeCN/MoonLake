@@ -17,22 +17,7 @@
 
 package com.mcmoonlake.api.scoreboard
 
-import com.mcmoonlake.api.player.MoonLakePlayer
-import org.bukkit.entity.Player
+interface Entry {
 
-interface ScoreboardSide {
-
-    var displayName: String
-
-    @Throws(IllegalStateException::class)
-    fun registerNewEntry(name: String): EntrySide
-
-    fun getEntryOrRegisterNew(name: String): EntrySide
-
-    @Throws(IllegalStateException::class)
-    fun getEntry(name: String): EntrySide?
-
-    fun apply(player: Player)
-
-    fun apply(player: MoonLakePlayer)
+    val name: String
 }

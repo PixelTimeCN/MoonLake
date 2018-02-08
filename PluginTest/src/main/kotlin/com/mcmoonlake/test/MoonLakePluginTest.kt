@@ -52,6 +52,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.net.URL
+import java.text.DecimalFormat
 import java.util.*
 
 class MoonLakePluginTest : JavaPlugin() {
@@ -553,22 +554,29 @@ class MoonLakePluginTest : JavaPlugin() {
                 }
                 if(event.message == "/sb test") {
                     side.displayName = "&6Scoreboard Side".toColor()
-                    side.registerNewEntry("&7Health: &a&l".toColor()).score = 1
-                    side.registerNewEntry("&7Food: &a&l".toColor()).score = 0
+                    side.registerNewEntry("&7Health: &a&l".toColor()).score = 4
+                    side.registerNewEntry("&7Food: &a&l".toColor()).score = 3
+                    side.registerNewEntry("&7X: &a&l".toColor()).score = 2
+                    side.registerNewEntry("&7Y: &a&l".toColor()).score = 1
+                    side.registerNewEntry("&7Z: &a&l".toColor()).score = 0
                     side.apply(event.player)
 
                     runTaskTimerAsync({
                         getOnlinePlayers().forEach {
-                            side.getEntry("&7Health: &a&l".toColor())?.suffix = it.health.toInt().toString()
+                            side.getEntry("&7Health: &a&l".toColor())?.suffix = format.format(it.health).toString()
                             side.getEntry("&7Food: &a&l".toColor())?.suffix = it.foodLevel.toString()
+                            side.getEntry("&7X: &a&l".toColor())?.suffix = it.location.blockX.toString()
+                            side.getEntry("&7Y: &a&l".toColor())?.suffix = it.location.blockY.toString()
+                            side.getEntry("&7Z: &a&l".toColor())?.suffix = it.location.blockZ.toString()
                         }
-                    }, 0L, 20L)
+                    }, 0L, 2L)
                 }
             }
         }.registerEvent(this)
     }
 
-    val side: ScoreboardSide by lazy { Scoreboards.registerNewScoreboardSide() }
+    val format = DecimalFormat("#.#")
+    val side: ScoreboardSide by lazy { Scoreboards.registerNewScoreboardSide("test_side", true) }
 
     class ItemShow(itemStack: ItemStack) : ChatComponentFancy("[") {
         init {
