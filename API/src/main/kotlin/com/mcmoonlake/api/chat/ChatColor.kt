@@ -162,6 +162,9 @@ enum class ChatColor(
     override fun toString(): String
             = "$CHAR_COLOR$code"
 
+    fun toBukkit(): org.bukkit.ChatColor
+            = org.bukkit.ChatColor.valueOf(name)
+
     companion object {
 
         /**
@@ -199,5 +202,10 @@ enum class ChatColor(
             }
             return String(chars)
         }
+
+        @JvmStatic
+        @JvmName("fromBukkit")
+        fun fromBukkit(bukkit: org.bukkit.ChatColor): ChatColor
+                = valueOf(bukkit.name)
     }
 }

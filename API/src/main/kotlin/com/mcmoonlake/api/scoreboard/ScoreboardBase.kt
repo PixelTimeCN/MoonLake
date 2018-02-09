@@ -17,18 +17,20 @@
 
 package com.mcmoonlake.api.scoreboard
 
-import com.mcmoonlake.api.getScoreboardManager
-import org.bukkit.scoreboard.Scoreboard
+import com.mcmoonlake.api.player.MoonLakePlayer
+import org.bukkit.entity.Player
 
-object Scoreboards {
+interface ScoreboardBase {
 
-    private val impl: Class<ScoreboardSide> by lazy {
-        @Suppress("UNCHECKED_CAST")
-        Class.forName("com.mcmoonlake.impl.scoreboard.ScoreboardSideImpl") as Class<ScoreboardSide> }
+    @Throws(IllegalStateException::class)
+    fun registerNewEntry(name: String): Entry
 
-    @JvmStatic
-    @JvmName("registerNewScoreboardSide")
-    fun registerNewScoreboardSide(name: String, fromMain: Boolean = false): ScoreboardSide
-            = impl.getConstructor(String::class.java, Scoreboard::class.java)
-            .newInstance(name, if(fromMain) getScoreboardManager().mainScoreboard else null)
+    fun getEntryOrRegisterNew(name: String): Entry
+
+    @Throws(IllegalStateException::class)
+    fun getEntry(name: String): Entry?
+
+    fun apply(player: Player)
+
+    fun apply(player: MoonLakePlayer)
 }

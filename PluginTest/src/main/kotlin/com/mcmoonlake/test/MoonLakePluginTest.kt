@@ -40,7 +40,7 @@ import com.mcmoonlake.api.packet.*
 import com.mcmoonlake.api.particle.Particle
 import com.mcmoonlake.api.player.PlayerInfo
 import com.mcmoonlake.api.scoreboard.ScoreboardSide
-import com.mcmoonlake.api.scoreboard.Scoreboards
+import com.mcmoonlake.api.scoreboard.ScoreboardTeam
 import com.mcmoonlake.api.task.MoonLakeRunnable
 import org.bukkit.*
 import org.bukkit.entity.Pig
@@ -571,12 +571,29 @@ class MoonLakePluginTest : JavaPlugin() {
                         }
                     }, 0L, 2L)
                 }
+                if(event.message == "/sb test_team") {
+                    val team1 = team.registerNewEntry("team_red")
+                    team1.color = ChatColor.RED
+                    team1.prefix = "${team1.color}[RED]"
+                    team1.addMember(event.player.name)
+                    team.apply(event.player)
+                }
+                if(event.message == "/sb test_team_join") {
+                    val team2 = team.registerNewEntry("team_blue")
+                    team2.color = ChatColor.BLUE
+                    team2.prefix = "${team2.color}[BLUE]"
+                    getOnlinePlayers().filter { it != event.player }.forEach {
+                        team2.addMember(it.name)
+                        team.apply(it)
+                    }
+                }
             }
         }.registerEvent(this)
     }
 
     val format = DecimalFormat("#.#")
-    val side: ScoreboardSide by lazy { Scoreboards.registerNewScoreboardSide("test_side", true) }
+    val side: ScoreboardSide by lazy { ScoreboardSide("test_side", false) }
+    val team: ScoreboardTeam by lazy { ScoreboardTeam() }
 
     class ItemShow(itemStack: ItemStack) : ChatComponentFancy("[") {
         init {

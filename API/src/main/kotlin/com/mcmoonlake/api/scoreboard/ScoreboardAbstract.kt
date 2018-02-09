@@ -15,27 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mcmoonlake.impl.scoreboard
+package com.mcmoonlake.api.scoreboard
 
-import com.mcmoonlake.api.scoreboard.EntrySide
-import org.bukkit.scoreboard.Score
-import org.bukkit.scoreboard.Team
+import com.mcmoonlake.api.player.MoonLakePlayer
+import org.bukkit.entity.Player
+import org.bukkit.scoreboard.Scoreboard
 
-class EntrySideImpl(
-        override val name: String,
-        private val handleTeam: Team,
-        private val handle: Score
-) : EntrySide {
+abstract class ScoreboardAbstract : ScoreboardBase {
 
-    override var score: Int
-        get() = handle.score
-        set(value) { handle.score = value }
+    protected abstract val handle: Scoreboard
 
-    override var prefix: String
-        get() = handleTeam.prefix
-        set(value) { handleTeam.prefix = value }
+    override fun apply(player: MoonLakePlayer)
+            = apply(player.bukkitPlayer)
 
-    override var suffix: String
-        get() = handleTeam.suffix
-        set(value) { handleTeam.suffix = value }
+    override fun apply(player: Player) {
+        player.scoreboard = handle
+    }
 }

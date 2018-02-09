@@ -17,22 +17,76 @@
 
 package com.mcmoonlake.api.scoreboard
 
-import com.mcmoonlake.api.player.MoonLakePlayer
-import org.bukkit.entity.Player
+import com.mcmoonlake.api.getScoreboardManager
+import org.bukkit.scoreboard.*
 
-interface ScoreboardSide {
+open class ScoreboardSide(
+        val name: String,
+        fromMain: Boolean = false
+) : ScoreboardAbstract() {
+
+    final override val handle: Scoreboard =
+            if(fromMain) getScoreboardManager().mainScoreboard
+            else getScoreboardManager().newScoreboard
+
+    protected val objective: Objective = handle.registerNewObjective(name, "dummy")
+
+    init {
+        objective.displaySlot = DisplaySlot.SIDEBAR
+    }
 
     var displayName: String
+        get() = objective.displayName
+        set(value) { objective.displayName = value }
 
     @Throws(IllegalStateException::class)
-    fun registerNewEntry(name: String): EntrySide
+    override fun registerNewEntry(name: String): EntrySide {
+        var team: Team? = handle.getTeam(name)
+        if(team != null)
+            throw IllegalStateException("Entry name '$name' is already in use.")
+        team = handle.registerNewTeam(name)
+        team.addEntry(name)
+        return EntrySideBase(name, team, objective.getScore(name))
+    }
 
-    fun getEntryOrRegisterNew(name: String): EntrySide
+    override fun getEntryOrRegisterNew(name: String): EntrySide {
+        var team: Team? = handle.getTeam(name)
+        if(team == null) {
+            team = handle.registerNewTeam(name)
+            team.addEntry(name)
+        }
+        return EntrySideBase(name, team!!, objective.getScore(name))
+    }
 
     @Throws(IllegalStateException::class)
-    fun getEntry(name: String): EntrySide?
+    override fun getEntry(name: String): EntrySide? {
+        val team: Team = handle.getTeam(name) ?: throw IllegalStateException("Entry name '$name' is not register.")
+        return EntrySideBase(name, team, objective.getScore(name))
+    }
 
-    fun apply(player: Player)
+    @Throws(IllegalStateException::class)
+    fun unregisterEntry(name: String) {
+        val team: Team = handle.getTeam(name) ?: throw IllegalStateException("Entry name '$name' is not register.")
+        team.unregister()
+        handle.resetScores(name)
+    }
 
-    fun apply(player: MoonLakePlayer)
+    protected open class EntrySideBase(
+            override val name: String,
+            private val handleTeam: Team,
+            private val handleScore: Score
+    ) : EntrySide {
+
+        override var score: Int
+            get() = handleScore.score
+            set(value) { handleScore.score = value }
+
+        override var prefix: String
+            get() = handleTeam.prefix
+            set(value) { handleTeam.prefix = value }
+
+        override var suffix: String
+            get() = handleTeam.suffix
+            set(value) { handleTeam.suffix = value }
+    }
 }
